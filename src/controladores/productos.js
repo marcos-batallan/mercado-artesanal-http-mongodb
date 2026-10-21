@@ -38,12 +38,12 @@ function crearControladorProductos(servicio) {
     const productos = await servicio.listar(req.query.categoria);
     res.json(productos);
   }
-  return { 
-    listar, 
-    mostrarFormulario, 
-    mostrarDetalle, 
-    crear, 
-    listarApi 
+  return {
+    listar,
+    mostrarFormulario,
+    mostrarDetalle,
+    crear,
+    listarApi,
   };
 }
 module.exports = { crearControladorProductos };

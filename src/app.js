@@ -6,13 +6,14 @@ const {
   crearIdentificadorSolicitud,
   medirDuracion,
 } = require("./middleware/solicitudes");
+const { crearManejadorErrores } = require("./middleware/errores");
 const { crearControladorProductos } = require("./controladores/productos");
 const { crearRouterProductos } = require("./rutas/productos");
 
 function crearApp({ servicioProductos, formatoRegistro }) {
   const app = express();
   const controladorProductos = crearControladorProductos(servicioProductos);
-  const productosRouter = crearRouterProductos(controladorProductos);
+  // const productosRouter = crearRouterProductos(controladorProductos);
 
   app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, "..", "views"));
@@ -31,14 +32,23 @@ function crearApp({ servicioProductos, formatoRegistro }) {
   });
   app.get("/api/productos", controladorProductos.listarApi);
 
-  app.use("/productos", productosRouter);
+  app.use("/productos", crearRouterProductos(controladorProductos));
   app.use((req, res) => {
+    if (req.path.startsWith("/api/")) {
+      return res.status(404).json({ error: "Ruta no encontrada" });
+    }
     res.status(404).render("no-encontrado", {
       titulo: "Página no encontrada",
-      mensaje: "La dirección solicitada no existe",
+      mensaje: "La dirección solicitada no existe.",
     });
   });
-
+  app.use(
+    crearManejadorErrores({
+      vistaFormulario: "productos/nuevo",
+      tituloFormulario: "Nuevo producto",
+    }),
+  );
   return app;
 }
+
 module.exports = { crearApp };

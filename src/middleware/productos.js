@@ -5,7 +5,7 @@ function prepararAreaProductos(req, res, next) {
 
 function validarProducto(req, res, next) {
   const valores = req.body ?? {};
-  const nombre = 
+  const nombre =
     typeof valores.nombre === "string" ? valores.nombre.trim() : "";
   const categoria =
     typeof valores.categoria === "string" ? valores.categoria.trim() : "";

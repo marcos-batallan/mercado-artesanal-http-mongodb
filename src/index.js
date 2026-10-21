@@ -1,8 +1,8 @@
 const { leerConfiguracion } = require("./config/entorno");
 const {
   conectarBaseDatos,
-  desconectarBaseDatos
-} = require("../src/config/base-datos");
+  desconectarBaseDatos,
+} = require("./config/base-datos");
 const { crearServicioProductosMongo } = require("./servicios/productos-mongo");
 const { crearApp } = require("./app");
 
@@ -16,7 +16,7 @@ async function main() {
     console.log(`Aplicación disponible en http://localhost:${puerto}`);
   });
   let cerrando = false;
-  function cerrar () {
+  function cerrar() {
     if (cerrando) return;
     cerrando = true;
     servidor.close(async () => {
@@ -39,7 +39,7 @@ async function main() {
   });
 }
 main().catch(async (error) => {
-  console.error("No se pudo iniciar la aplicación", error.name);
+  console.error("No se pudo iniciar la aplicación", error.name, "-", error.message);
   console.error("Revisar entorno, DNS, red, acceso a Atlas y puerto.");
   process.exitCode = 1;
   try {

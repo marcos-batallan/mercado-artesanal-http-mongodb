@@ -1,7 +1,7 @@
 {
   "name": "mercado-artesanal-mongodb",
   "version": "1.0.0",
-  "private": "true",
+  "private": true,
   "type": "commonjs",
   "main": "src/index.js",
   "engines": {
