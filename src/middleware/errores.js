@@ -11,7 +11,7 @@ function crearManejadorErrores({ vistaFormulario, tituloFormulario }) {
       error.type === "entity.parse.failed";
     const estado = esEntrada ? 400 : 500;
     let mensaje = esEntrada
-      ? "Revisa los datos enviados."
+      ? "Revisá los datos enviados."
       : "No se pudo completar la operación.";
     if (error.codigo === "ID_INVALIDO") {
       mensaje = "El identificador debe tener 24 caracteres hexadecimales.";
@@ -31,8 +31,10 @@ function crearManejadorErrores({ vistaFormulario, tituloFormulario }) {
       });
     }
     return res.status(estado).render("no-encontrado", {
-      titulo: esEntrada ? "Solicitud inválida" : "Error del servivio",
+      titulo: esEntrada ? "Solicitud inválida" : "Error del servicio",
+      mensaje,
     });
   };
 }
+
 module.exports = { crearManejadorErrores };

@@ -9,16 +9,15 @@ const {
 const { crearManejadorErrores } = require("./middleware/errores");
 const { crearControladorProductos } = require("./controladores/productos");
 const { crearRouterProductos } = require("./rutas/productos");
+const { crearRouterProductosApi } = require("./rutas/productos-api");
 
 function crearApp({ servicioProductos, formatoRegistro }) {
   const app = express();
-  const controladorProductos = crearControladorProductos(servicioProductos);
-  // const productosRouter = crearRouterProductos(controladorProductos);
+  const controlador = crearControladorProductos(servicioProductos);
 
   app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, "..", "views"));
   app.set("layout", "layouts/main");
-
   app.use(morgan(formatoRegistro));
   app.use(crearIdentificadorSolicitud());
   app.use(medirDuracion);
@@ -26,16 +25,14 @@ function crearApp({ servicioProductos, formatoRegistro }) {
   app.use(express.static(path.join(__dirname, "..", "public")));
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
-
   app.get("/", (req, res) => {
-    res.render("inicio", { titulo: "Mercado Artesanal" });
+    res.render("inicio", { titulo: "Mercado artesanal" });
   });
-  app.get("/api/productos", controladorProductos.listarApi);
-
-  app.use("/productos", crearRouterProductos(controladorProductos));
+  app.use("/api/productos", crearRouterProductosApi(controlador));
+  app.use("/productos", crearRouterProductos(controlador));
   app.use((req, res) => {
     if (req.path.startsWith("/api/")) {
-      return res.status(404).json({ error: "Ruta no encontrada" });
+      return res.status(404).json({ error: "Ruta no encontrada." });
     }
     res.status(404).render("no-encontrado", {
       titulo: "Página no encontrada",
